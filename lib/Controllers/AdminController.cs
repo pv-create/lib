@@ -1,12 +1,22 @@
+using lib.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace lib.Controllers;
 
 public class AdminController : Controller
 {
-    // GET
-    public IActionResult Index()
+    ApplicationDbContext _context;
+    public AdminController(ApplicationDbContext context)
     {
-        return View();
+        _context = context;
+    }
+     
+    
+    public JsonResult Index()
+    {
+        var check = _context.Users.Select(All=>new {All.Id, All.Email, All.PhoneNumber});
+        ViewBag.Users = _context.Users.ToList();
+        return Json(check);
     }
 }
